@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Florens Courier</title>
+<style>
+:root{color-scheme:light;--bg:#fff;--s:#f6f6f6;--bd:#e6e6e6;--tx:#0a0a0a;--mut:#737373;--er:#b91c1c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.shell{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+aside{border-right:1px solid var(--bd);padding:24px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;align-self:start}
+.brand{font-weight:800;font-size:18px;letter-spacing:-.4px;padding:0 10px 18px}.brand small{display:block;font-weight:500;font-size:12px;color:var(--mut);letter-spacing:0}
+.nv{display:flex;align-items:center;gap:10px;border:0;background:none;padding:10px;border-radius:9px;font-weight:600;color:var(--mut);text-align:left}
+.nv:hover{background:var(--s)}.nv.on{background:var(--s);color:var(--tx)}
+main{padding:28px 32px 48px;max-width:980px;width:100%}
+.view{display:none}.view.on{display:block}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+h1{font-size:26px;letter-spacing:-.8px;margin:0}
+h2{font-size:14px;margin:0 0 14px;letter-spacing:-.1px}
+.btn{border:1px solid var(--tx);background:var(--tx);color:#fff;border-radius:10px;padding:11px 16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.o{background:var(--bg);color:var(--tx);border-color:var(--bd)}
+.btn.s{padding:7px 11px;font-size:13px;border-radius:8px}
+.btn.d{color:var(--er)}
+.btn:active{opacity:.8}
+.mon{display:flex;align-items:center;gap:4px;border:1px solid var(--bd);border-radius:10px;padding:3px}
+.mon button{border:0;background:none;width:34px;height:34px;border-radius:7px;font-size:18px}.mon button:hover{background:var(--s)}
+.mon span{min-width:120px;text-align:center;font-weight:600;font-size:14px;text-transform:capitalize}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.card{border:1px solid var(--bd);border-radius:14px;padding:16px;background:var(--bg)}
+.kpi .l{font-size:12px;color:var(--mut);font-weight:600}.kpi .v{font-size:28px;font-weight:800;letter-spacing:-1px;margin-top:4px}
+.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin-bottom:12px}
+.banner{background:var(--tx);color:#fff;border-radius:14px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.banner b{display:block}.banner span{color:#a3a3a3;font-size:13px}
+.banner .btn{background:#fff;color:var(--tx);border-color:#fff}
+.chart{display:flex;align-items:flex-end;gap:6px;height:150px;overflow-x:auto;padding-bottom:2px}
+.bar{flex:1 0 22px;max-width:46px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%;font-size:11px;color:var(--mut)}
+.bar i{display:block;width:100%;background:var(--tx);border-radius:5px 5px 2px 2px;min-height:3px}
+.bar b{color:var(--tx);font-size:11px}
+.cat{margin:10px 0;font-size:13px}.cat .t{display:flex;justify-content:space-between;margin-bottom:5px}
+.cat .tr{height:6px;background:var(--s);border-radius:9px;overflow:hidden}.cat .tr i{display:block;height:100%;background:var(--tx)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;border-top:1px solid var(--bd)}
+.row:first-child{border-top:0;padding-top:0}
+.row .m{min-width:0}.row .m b{display:block}.row .m small{color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .a{display:flex;gap:6px;flex-shrink:0}
+.num{font-weight:700;white-space:nowrap}
+.empty{text-align:center;color:var(--mut);padding:22px 8px;font-size:14px}
+label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin:0 0 6px}
+input,select,textarea{width:100%;border:1px solid var(--bd);border-radius:10px;padding:11px 12px;background:var(--bg);min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--tx);outline-offset:-1px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.fld{margin-bottom:16px}
+.step{display:flex;gap:8px}.step button{width:48px;border:1px solid var(--bd);background:var(--s);border-radius:10px;font-size:22px}
+.step input{text-align:center;font-size:20px;font-weight:700}
+.xl{display:grid;grid-template-columns:130px 110px 1fr 40px;gap:8px;margin-bottom:8px}
+.xl button{border:1px solid var(--bd);background:var(--bg);border-radius:10px;font-size:18px;color:var(--mut)}
+pre{margin:0;white-space:pre-wrap;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--s);border-radius:10px;padding:12px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.note{color:var(--mut);font-size:13px;margin:0 0 12px}
+nav.bot{display:none}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:#fff;padding:10px 16px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30;white-space:nowrap}
+.toast.on{opacity:1}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.dh{text-align:center;font-size:11px;color:var(--mut);font-weight:600;padding:4px 0}
+.dy{border:1px solid var(--bd);background:var(--bg);border-radius:10px;min-height:64px;padding:6px 7px;text-align:left;display:flex;flex-direction:column;justify-content:space-between;font-size:13px;font-weight:600}
+.dy small{font-size:10px;font-weight:600;color:var(--mut)}
+.dy.s{background:var(--tx);color:#fff;border-color:var(--tx)}.dy.s small{color:#d4d4d4}
+.dy.o{background:var(--s);color:var(--mut)}
+.dy.t{outline:2px solid var(--tx);outline-offset:1px}
+.dy.e{visibility:hidden}
+.lg{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-top:12px;flex-wrap:wrap}
+.dy{overflow:hidden;min-width:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.ls{display:none;font-size:12px}
+.br{display:flex;gap:8px;margin-bottom:12px}.br .btn{flex:1;padding:10px 6px}
+.br .btn.on{background:var(--tx);color:#fff;border-color:var(--tx)}
+@media(max-width:860px){.cal{gap:4px}.dy{min-height:50px;padding:5px;font-size:14px}.lw{display:none}.ls{display:inline}.row.w{flex-wrap:wrap}.row.w .m{flex-basis:100%}}
+@media(max-width:860px){
+.shell{display:block}aside{display:none}
+main{padding:18px 16px calc(96px + env(safe-area-inset-bottom,0px))}
+h1{font-size:22px}
+.kpis{grid-template-columns:1fr 1fr;gap:10px}.kpi .v{font-size:24px}
+.grid,.f2{grid-template-columns:1fr}.f2{gap:0}.f2>div{margin-bottom:16px}
+.xl{grid-template-columns:1fr 1fr 40px}.xl input:nth-child(3){grid-column:1/-1;grid-row:2}.xl button{grid-column:3;grid-row:1}
+.head .btn.new{display:none}
+nav.bot{display:flex;position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid var(--bd);padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around;align-items:center;z-index:20}
+nav.bot button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:600;color:var(--mut);padding:6px 5px}
+nav.bot button.on{color:var(--tx)}nav.bot svg{width:22px;height:22px}
+nav.bot .plus{background:var(--tx);color:#fff;width:50px;height:50px;border-radius:50%;padding:0;justify-content:center;font-size:26px;font-weight:400}
+.banner{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+  <div class="brand">Florens<small>Courier · отчёты смен</small></div>
+  <button class="nv on" data-v="dash">▦ Обзор</button>
+  <button class="nv" data-v="list">☰ Отчёты</button>
+  <button class="nv" data-v="sch">▤ График работы</button>
+  <button class="nv" data-v="exp">₴ Расходы и заработок</button>
+  <button class="nv" data-v="set">⚙ Настройки</button>
+  <div style="flex:1"></div>
+  <button class="btn" data-act="new">＋ Новый отчёт</button>
+</aside>
+<main>
+
+<section class="view on" id="v-dash">
+  <div class="head"><h1>Обзор</h1><div class="mon"><button data-act="pm" aria-label="Назад">‹</button><span class="ml"></span><button data-act="nm" aria-label="Вперёд">›</button></div></div>
+  <div id="banner"></div>
+  <div class="kpis" id="kpis"></div>
+  <div class="grid">
+    <div class="card"><h2>Доставки по сменам</h2><div class="chart" id="chart"></div></div>
+    <div class="card"><h2>Расходы по категориям</h2><div id="cats"></div></div>
+  </div>
+  <div class="card"><h2>Последние отчёты</h2><div id="recent"></div></div>
+</section>
+
+<section class="view" id="v-list">
+  <div class="head"><h1>Отчёты</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><div class="mon"><button data-act="pm" aria-label="Назад">‹</button><span class="ml"></span><button data-act="nm" aria-label="Вперёд">›</button></div><button class="btn o" data-act="cm">Сводка за месяц</button></div></div>
+  <div class="card" id="all"></div>
+</section>
+
+<section class="view" id="v-form">
+  <div class="head"><h1 id="ft">Новый отчёт</h1><button class="btn o s" data-v="list">← Назад</button></div>
+  <div class="card">
+    <div class="f2">
+      <div><label for="fd">Дата</label><input type="date" id="fd"></div>
+      <div><label for="fk">Пробег, км (необязательно)</label><input type="number" id="fk" inputmode="decimal" min="0" placeholder="0"></div>
+    </div>
+    <div class="fld"><label>Количество доставок</label><div class="step"><button type="button" data-act="dm">−</button><input type="number" id="fn" inputmode="numeric" min="0" value="0"><button type="button" data-act="dp">+</button></div></div>
+    <div class="fld"><label for="fe">Заработок за смену, ₴ (только для тебя, в текст отчёта не попадает)</label><input type="number" id="fe" inputmode="decimal" min="0" placeholder="0"></div>
+    <label>Расходы</label>
+    <div id="xs"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"><button type="button" class="btn o s" data-act="ax" data-c="Зарядка">＋ Зарядка</button><button type="button" class="btn o s" data-act="ax" data-c="Парковка">＋ Парковка</button><button type="button" class="btn o s" data-act="ax" data-c="Мойка">＋ Мойка</button><button type="button" class="btn o s" data-act="ax" data-c="Прочее">＋ Другое</button></div>
+    <div class="fld"><label for="fc">Комментарий</label><textarea id="fc" rows="2" placeholder="Задержки, происшествия, заметки"></textarea></div>
+    <label>Предпросмотр</label><pre id="pv"></pre>
+    <div class="acts"><button class="btn" data-act="sc">Сохранить и скопировать</button><button class="btn o" data-act="sv">Только сохранить</button></div>
+  </div>
+</section>
+
+<section class="view" id="v-sch">
+  <div class="head"><h1>График работы</h1><div class="mon"><button data-act="pm" aria-label="Назад">‹</button><span class="ml"></span><button data-act="nm" aria-label="Вперёд">›</button></div></div>
+  <div class="kpis" id="skp"></div>
+  <div class="card"><div class="br" id="br"></div><div class="cal" id="cal"></div><div class="lg"><span>■ Смена</span><span>□ Выходной</span><span>Выбери режим сверху и нажимай на дни</span></div></div>
+</section>
+
+<section class="view" id="v-exp">
+  <div class="head"><h1>Расходы и заработок</h1><div class="mon"><button data-act="pm" aria-label="Назад">‹</button><span class="ml"></span><button data-act="nm" aria-label="Вперёд">›</button></div></div>
+  <div class="kpis" id="ekp"></div>
+  <p class="note">Зарядку оплачивает начальник, поэтому из заработка она не вычитается. Чистый заработок = заработок − прочие расходы.</p>
+  <div class="card" style="margin-bottom:12px"><h2>Заработок по сменам</h2><div id="ern"></div></div>
+  <div class="card" style="margin-bottom:12px"><h2>Зарядка (платит начальник)</h2><div id="chg"></div></div>
+  <div class="card"><h2>Прочие расходы</h2><div id="oth"></div></div>
+</section>
+
+<section class="view" id="v-set">
+  <div class="head"><h1>Настройки</h1></div>
+  <div class="card" style="margin-bottom:12px"><h2>Профиль</h2><label for="sn">Имя курьера (попадёт в текст отчёта)</label><input id="sn" placeholder="Например, Иван"></div>
+  <div class="card" style="margin-bottom:12px"><h2>Резервная копия</h2><p class="note">Данные хранятся только в этом браузере. Скопируй копию и сохрани в заметках или мессенджере. Чтобы перенести на другой телефон, вставь её ниже.</p>
+    <div class="acts" style="margin:0 0 12px"><button class="btn o" data-act="bk">Скопировать резервную копию</button></div>
+    <label for="rs">Восстановить из копии</label><textarea id="rs" rows="3" placeholder="Вставь сюда скопированный текст"></textarea>
+    <div class="acts"><button class="btn o" data-act="rt">Восстановить</button></div></div>
+  <div class="card"><h2>Опасная зона</h2><button class="btn o d" data-act="wipe">Удалить все отчёты</button></div>
+</section>
+
+</main>
+</div>
+<nav class="bot">
+  <button data-v="dash" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Обзор</button>
+  <button data-v="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Отчёты</button>
+  <button class="plus" data-act="new" aria-label="Новый отчёт">＋</button>
+  <button data-v="sch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>График</button>
+  <button data-v="exp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M17 7H9.5a2.5 2.5 0 0 0 0 5h5a2.5 2.5 0 0 1 0 5H6"/></svg>Расходы</button>
+  <button data-v="set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9c.6.5 1.3.9 2 1.2l.4 2.6h4l.4-2.6c.7-.3 1.4-.7 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>Ещё</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+var KEY="florens_courier_dash_v1",CATS=["Зарядка","Парковка","Мойка","Прочее"];
+var D={name:"",reports:[],sched:{}},editId=null,view="dash";
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&Array.isArray(p.reports))D={name:p.name||"",reports:p.reports,sched:p.sched||{}}}}catch(e){}
+function $(i){return document.getElementById(i)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
+function today(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)}
+var M=today().slice(0,7);
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function fmt(n){return new Intl.NumberFormat("ru-RU",{maximumFractionDigits:2}).format(n||0)}
+function money(n){return fmt(n)+" ₴"}
+function fd(s){var p=s.split("-");return p[2]+"."+p[1]+"."+p[0]}
+function wd(s){return new Date(s+"T12:00:00").toLocaleDateString("ru-RU",{weekday:"short"})}
+function cost(r){return(r.exp||[]).reduce(function(s,e){return s+(+e.a||0)},0)}
+function inM(m){return D.reports.filter(function(r){return r.date.slice(0,7)===m}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0})}
+function shiftM(m,n){var d=new Date(m+"-01T12:00:00");d.setMonth(d.getMonth()+n);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
+function toast(t){var e=$("toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){e.classList.remove("on")},1800)}
+function copy(t){function fb(){var a=document.createElement("textarea");a.value=t;a.style.cssText="position:fixed;opacity:0";document.body.appendChild(a);a.select();try{document.execCommand("copy");toast("Скопировано ✓")}catch(e){toast("Не удалось скопировать")}document.body.removeChild(a)}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast("Скопировано ✓")},fb);else fb()}
+function text(r){
+  var l=["Отчёт за смену — "+fd(r.date)];
+  if(D.name)l.push("Курьер: "+D.name);
+  l.push("Доставок: "+r.n);
+  if(r.km)l.push("Пробег: "+r.km+" км");
+  (r.exp||[]).forEach(function(e){if(e.a||e.n)l.push(e.c+": "+(e.a?money(e.a):"—")+(e.n?" ("+e.n+")":""))});
+  if(cost(r))l.push("Итого расходов: "+money(cost(r)));
+  if(r.note)l.push("Комментарий: "+r.note);
+  return l.join("\n");
+}
+var DL=null;
+try{if(window.claude&&claude.use)claude.use("downloads").then(function(x){DL=x;if(x)render()},function(){})}catch(e){}
+function chg(r){return(r.exp||[]).reduce(function(s,e){return s+(e.c==="Зарядка"?(+e.a||0):0)},0)}
+function kpi(k){return'<div class="card kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div></div>'}
+var BR="s";function lab(s,rep){var c=rep?" ✓":"";return s==="s"?'<span class="lw">Смена'+c+'</span><span class="ls">●'+c+'</span>':s==="o"?'<span class="lw">Выходной</span><span class="ls">—</span>':rep?'<span class="lw">Отчёт ✓</span><span class="ls">✓</span>':""}
+function renderSch(){var y=+M.slice(0,4),mo=+M.slice(5)-1,last=new Date(y,mo+1,0).getDate(),off=(new Date(y,mo,1).getDay()+6)%7,t=today(),sh=0,of=0,miss=0;
+  var h=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map(function(x){return'<div class="dh">'+x+'</div>'}).join("");
+  for(var i=0;i<off;i++)h+='<div class="dy e"></div>';
+  for(var d=1;d<=last;d++){var k=M+"-"+String(d).padStart(2,"0"),s=D.sched[k]||"",rep=D.reports.some(function(r){return r.date===k});
+    if(s==="s"){sh++;if(k<t&&!rep)miss++}if(s==="o")of++;
+    h+='<button class="dy'+(s?" "+s:"")+(k===t?" t":"")+'" data-act="sd" data-k="'+k+'">'+d+'<small>'+lab(s,rep)+'</small></button>'}
+  $("cal").innerHTML=h;$("br").innerHTML=[["s","Смена"],["o","Выходной"],["x","Стереть"]].map(function(q){return'<button class="btn o'+(BR===q[0]?' on':'')+'" data-act="br" data-b="'+q[0]+'">'+q[1]+'</button>'}).join("");
+  $("skp").innerHTML=[["Смен в графике",sh],["Выходных",of],["Отчётов сдано",inM(M).length],["Без отчёта",miss]].map(kpi).join("")}
+function renderExp(){var rs=inM(M),earn=0,ct=0,ot=0,cl=[],ol=[],el=[];
+  rs.forEach(function(r){var e=+r.e||0;earn+=e;if(e)el.push('<div class="row"><div class="m"><b>'+fd(r.date)+'</b><small>'+r.n+' дост.</small></div><span class="num">'+money(e)+'</span></div>');
+    (r.exp||[]).forEach(function(x){if(!x.a)return;var it={d:r.date,c:x.c,a:+x.a,n:x.n};if(x.c==="Зарядка"){ct+=it.a;cl.push(it)}else{ot+=it.a;ol.push(it)}})});
+  $("ekp").innerHTML=[["Заработок",money(earn)],["Чистый заработок",money(earn-ot)],["Зарядка (платит начальник)",money(ct)],["Прочие расходы",money(ot)]].map(kpi).join("");
+  function ls(a){return a.length?a.reverse().map(function(i){return'<div class="row"><div class="m"><b>'+fd(i.d)+'</b><small>'+esc(i.c)+(i.n?' · '+esc(i.n):'')+'</small></div><span class="num">'+money(i.a)+'</span></div>'}).join(""):'<div class="empty">Записей нет</div>'}
+  $("ern").innerHTML=el.length?el.reverse().join(""):'<div class="empty">Укажи заработок в отчёте за смену</div>';
+  $("chg").innerHTML=ls(cl);$("oth").innerHTML=ls(ol)}
+function wrapT(x,t,mw){var out=[];String(t).replace(/\r/g,"").split("\n").forEach(function(p){if(!p.trim()){out.push("");return}var ln="";p.split(/ +/).forEach(function(w){var s=ln?ln+" "+w:w;if(x.measureText(s).width>mw&&ln){out.push(ln);ln=w}else ln=s});out.push(ln)});while(out.length&&!out[out.length-1])out.pop();return out}
+function png(r){var L=[["Дата",fd(r.date)]];if(D.name)L.push(["Курьер",D.name]);L.push(["Доставок",String(r.n)]);if(r.km)L.push(["Пробег",r.km+" км"]);
+  (r.exp||[]).forEach(function(e){if(e.a||e.n){var lb=e.c+(e.n?" · "+e.n:"");L.push([lb.length>32?lb.slice(0,31)+"…":lb,e.a?money(e.a):"—"])}});
+  if(cost(r))L.push(["Итого расходов",money(cost(r))]);
+  var W=900,P=56,LH=58,top=232,c=document.createElement("canvas"),x=c.getContext("2d");x.font="26px Arial,sans-serif";
+  var nl=r.note?wrapT(x,r.note,W-2*P):[],H=top+L.length*LH+(nl.length?100+nl.length*38:0)+90;
+  c.width=W;c.height=H;x.textAlign="left";x.fillStyle="#fff";x.fillRect(0,0,W,H);x.fillStyle="#0a0a0a";x.fillRect(0,0,W,170);
+  x.fillStyle="#fff";x.font="bold 24px Arial,sans-serif";x.fillText("FLORENS COURIER",P,66);x.font="bold 46px Arial,sans-serif";x.fillText("Отчёт за смену",P,128);
+  var y=top;L.forEach(function(row){x.strokeStyle="#e6e6e6";x.lineWidth=2;x.beginPath();x.moveTo(P,y+16);x.lineTo(W-P,y+16);x.stroke();
+    x.textAlign="left";x.fillStyle="#737373";x.font="24px Arial,sans-serif";x.fillText(row[0],P,y-6);
+    x.textAlign="right";x.fillStyle="#0a0a0a";x.font="bold 26px Arial,sans-serif";x.fillText(row[1],W-P,y-6);y+=LH});
+  x.textAlign="left";
+  if(nl.length){x.fillStyle="#737373";x.font="bold 20px Arial,sans-serif";x.fillText("КОММЕНТАРИЙ",P,y+34);x.fillStyle="#0a0a0a";x.font="26px Arial,sans-serif";nl.forEach(function(t,i){x.fillText(t,P,y+78+i*38)})}
+  x.fillStyle="#a3a3a3";x.font="18px Arial,sans-serif";x.fillText("Florens Courier",P,H-36);
+  var url=c.toDataURL("image/png");
+  function shown(){var o=document.createElement("div");o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px";o.innerHTML='<img alt="Отчёт" style="max-width:100%;max-height:72vh;border-radius:8px;background:#fff" src="'+url+'"><div style="color:#fff;font-size:14px;text-align:center">Удерживай картинку и выбери «Сохранить» или «Поделиться»</div><button class="btn o">Закрыть</button>';o.querySelector("button").onclick=function(){o.remove()};document.body.appendChild(o)}
+  c.toBlob(function(b){if(!b){shown();return}
+    var get=DL?Promise.resolve(DL):(window.claude&&claude.use?claude.use("downloads").then(function(z){DL=z;return z},function(){return null}):Promise.resolve(null));
+    get.then(function(d){if(!d){shown();return}d.save({filename:"florens-"+r.date+".png",data:b}).then(function(){toast("PNG сохранён ✓")},function(er){if(er&&er.code==="declined")return;shown()})})},"image/png")}
+function go(v){view=v;["dash","list","form","set","sch","exp"].forEach(function(x){$("v-"+x).classList.toggle("on",x===v)});
+  document.querySelectorAll("[data-v]").forEach(function(b){var t=b.dataset.v;b.classList.toggle("on",t===v||(v==="form"&&t==="list"&&false))});
+  render();window.scrollTo(0,0)}
+function render(){
+  var m=new Date(M+"-01T12:00:00").toLocaleDateString("ru-RU",{month:"long",year:"numeric"});
+  document.querySelectorAll(".ml").forEach(function(e){e.textContent=m});
+  var rs=inM(M),n=rs.reduce(function(s,r){return s+r.n},0),c=rs.reduce(function(s,r){return s+cost(r)},0),km=rs.reduce(function(s,r){return s+(+r.km||0)},0);
+  var has=D.reports.some(function(r){return r.date===today()});
+  $("banner").innerHTML=has?"":'<div class="banner"><div><b>Смена сегодня не закрыта</b><span>Заполни отчёт, когда закончишь доставки</span></div><button class="btn" data-act="new">Заполнить отчёт</button></div>';
+  $("kpis").innerHTML=[["Доставки",n],["Смены",rs.length],["Заработок",money(rs.reduce(function(s,r){return s+(+r.e||0)},0))],["Зарядка",money(rs.reduce(function(s,r){return s+chg(r)},0))]].map(function(k){return'<div class="card kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div></div>'}).join("");
+  var mx=Math.max(1,Math.max.apply(null,rs.map(function(r){return r.n}).concat([1])));
+  $("chart").innerHTML=rs.length?rs.map(function(r){return'<div class="bar"><b>'+r.n+'</b><i style="height:'+Math.max(3,r.n/mx*100)+'px"></i>'+r.date.slice(8)+'</div>'}).join(""):'<div class="empty" style="width:100%">Нет данных за этот месяц</div>';
+  var by={};rs.forEach(function(r){(r.exp||[]).forEach(function(e){if(e.a)by[e.c]=(by[e.c]||0)+(+e.a)})});
+  var ks=Object.keys(by).sort(function(a,b){return by[b]-by[a]});
+  $("cats").innerHTML=ks.length?ks.map(function(k){return'<div class="cat"><div class="t"><span>'+esc(k)+'</span><b>'+money(by[k])+'</b></div><div class="tr"><i style="width:'+by[k]/c*100+'%"></i></div></div>'}).join(""):'<div class="empty">Расходов нет</div>';
+  $("recent").innerHTML=D.reports.length?rowsOf(D.reports.slice().sort(function(a,b){return a.date<b.date?1:-1}).slice(0,4),false):'<div class="empty">Пока нет отчётов</div>';
+  var all=rs.slice().reverse();
+  $("all").innerHTML=all.length?rowsOf(all,true):'<div class="empty">За этот месяц отчётов нет</div>';
+  $("sn").value=D.name;renderSch();renderExp();
+}
+function rowsOf(a,acts){return a.map(function(r){
+  return'<div class="row'+(acts?' w':'')+'"><div class="m"><b>'+fd(r.date)+' <span style="color:var(--mut);font-weight:500">'+wd(r.date)+'</span></b><small>'+r.n+' дост.'+(cost(r)?' · '+money(cost(r)):'')+(r.note?' · '+esc(r.note):'')+'</small></div>'+
+  (acts?'<div class="a"><button class="btn o s" data-act="cp" data-id="'+r.id+'">Копия</button><button class="btn o s" data-act="png" data-id="'+r.id+'">PNG</button><button class="btn o s" data-act="ed" data-id="'+r.id+'">Правка</button><button class="btn o s d" data-act="rm" data-id="'+r.id+'" aria-label="Удалить">×</button></div>':'<span class="num">'+r.n+'</span>')+'</div>'}).join("")}
+function xline(c,a,n){var d=document.createElement("div");d.className="xl";
+  d.innerHTML='<select>'+CATS.map(function(x){return'<option'+(x===c?" selected":"")+'>'+x+'</option>'}).join("")+'</select><input type="number" inputmode="decimal" min="0" step="any" placeholder="Сумма, ₴" value="'+esc(a)+'"><input placeholder="Комментарий" value="'+esc(n)+'"><button type="button" data-act="rx" aria-label="Убрать">×</button>';
+  $("xs").appendChild(d);pv()}
+function collect(){
+  var ex=[].slice.call(document.querySelectorAll("#xs .xl")).map(function(x){var i=x.querySelectorAll("input");return{c:x.querySelector("select").value,a:+i[0].value||0,n:i[1].value.trim()}}).filter(function(e){return e.a||e.n});
+  return{id:editId||String(Date.now()),date:$("fd").value||today(),n:Math.max(0,Math.round(+$("fn").value||0)),km:+$("fk").value||0,e:+$("fe").value||0,exp:ex,note:$("fc").value.trim()}}
+function pv(){$("pv").textContent=text(collect())}
+function openForm(r){editId=r?r.id:null;$("ft").textContent=r?"Редактирование":"Новый отчёт";
+  $("fd").value=r?r.date:today();$("fn").value=r?r.n:0;$("fk").value=r&&r.km?r.km:"";$("fe").value=r&&r.e?r.e:"";$("fc").value=r?r.note||"":"";
+  $("xs").innerHTML="";(r?r.exp:[]).forEach(function(e){xline(e.c,e.a||"",e.n)});
+  if(!r)xline("Зарядка","","");
+  go("form");pv()}
+function commit(andCopy){var r=collect();
+  var dup=D.reports.filter(function(x){return x.date===r.date&&x.id!==r.id})[0];
+  if(dup&&!confirm("За "+fd(r.date)+" уже есть отчёт. Сохранить ещё один?"))return;
+  var i=D.reports.findIndex(function(x){return x.id===r.id});if(i>=0)D.reports[i]=r;else D.reports.push(r);
+  save();M=r.date.slice(0,7);if(andCopy)copy(text(r));else toast("Сохранено ✓");go("list")}
+document.addEventListener("click",function(e){
+  var v=e.target.closest("[data-v]");if(v){go(v.dataset.v);return}
+  var b=e.target.closest("[data-act]");if(!b)return;var a=b.dataset.act,id=b.dataset.id;
+  var r=id?D.reports.filter(function(x){return x.id===id})[0]:null;
+  if(a==="new")openForm(null);
+  else if(a==="pm"){M=shiftM(M,-1);render()}
+  else if(a==="nm"){M=shiftM(M,1);render()}
+  else if(a==="dm"){$("fn").value=Math.max(0,(+$("fn").value||0)-1);pv()}
+  else if(a==="dp"){$("fn").value=(+$("fn").value||0)+1;pv()}
+  else if(a==="ax")xline(b.dataset.c,"","");
+  else if(a==="rx"){b.parentNode.remove();pv()}
+  else if(a==="sv")commit(false);
+  else if(a==="sc")commit(true);
+  else if(a==="cp"&&r)copy(text(r));
+  else if(a==="ed"&&r)openForm(r);
+  else if(a==="png"&&r)png(r);
+  else if(a==="br"){BR=b.dataset.b;renderSch()}
+  else if(a==="sd"){var k=b.dataset.k;if(BR==="x"||D.sched[k]===BR)delete D.sched[k];else D.sched[k]=BR;save();renderSch()}
+  else if(a==="rm"&&r){if(confirm("Удалить отчёт за "+fd(r.date)+"?")){D.reports=D.reports.filter(function(x){return x.id!==id});save();render();toast("Удалено")}}
+  else if(a==="cm"){var rs=inM(M);if(!rs.length){toast("Нет отчётов за месяц");return}
+    var l=["Сводка за "+$("v-list").querySelector(".ml").textContent,"Смен: "+rs.length,"Доставок: "+rs.reduce(function(s,x){return s+x.n},0),"Расходов: "+money(rs.reduce(function(s,x){return s+cost(x)},0)),""];
+    rs.forEach(function(x){l.push(fd(x.date)+" — "+x.n+" дост."+(cost(x)?", "+money(cost(x)):""))});copy(l.join("\n"))}
+  else if(a==="bk")copy(JSON.stringify(D));
+  else if(a==="rt"){try{var o=JSON.parse($("rs").value);if(!o||!Array.isArray(o.reports))throw 0;if(!confirm("Заменить текущие данные копией?"))return;D={name:o.name||"",reports:o.reports,sched:o.sched||{}};save();$("rs").value="";render();toast("Восстановлено ✓")}catch(x){toast("Неверный формат копии")}}
+  else if(a==="wipe"){if(confirm("Удалить все отчёты? Это нельзя отменить.")){D.reports=[];save();render();toast("Всё удалено")}}
+});
+document.addEventListener("input",function(e){if(view==="form"&&e.target.closest("#v-form"))pv()});
+$("sn").addEventListener("input",function(){D.name=this.value.trim();save()});
+render();
+})();
+</script>
+</body>
+</html>
