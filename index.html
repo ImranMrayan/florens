@@ -58,7 +58,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--tx);outline-offs
 .step input{text-align:center;font-size:20px;font-weight:700}
 .xl{display:grid;grid-template-columns:130px 110px 1fr 40px;gap:8px;margin-bottom:8px}
 .xk,.xp{display:none}.xl.ch{grid-template-columns:130px 78px 84px 100px 1fr 40px}.xl.ch .xk,.xl.ch .xp{display:block}
-.xl button{border:1px solid var(--bd);background:var(--bg);border-radius:10px;font-size:18px;color:var(--mut)}
+.xl button,.sl button{border:1px solid var(--bd);background:var(--bg);border-radius:10px;font-size:18px;color:var(--mut)}
+.sl{display:grid;grid-template-columns:minmax(0,1fr) 130px 40px;gap:8px;margin-bottom:8px}
 pre{margin:0;white-space:pre-wrap;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--s);border-radius:10px;padding:12px}
 .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
 .note{color:var(--mut);font-size:13px;margin:0 0 12px}
@@ -87,6 +88,7 @@ h1{font-size:22px}
 .grid,.f2{grid-template-columns:1fr}.f2{gap:0}.f2>div{margin-bottom:16px}
 .xl{grid-template-columns:1fr 1fr 40px}.xl .xn{grid-column:1/-1;grid-row:2}.xl button{grid-column:3;grid-row:1}
 .xl.ch{grid-template-columns:1fr 1fr 40px}.xl.ch .xp{grid-column:1;grid-row:2}.xl.ch .xa{grid-column:2/4;grid-row:2}.xl.ch .xn{grid-column:1/-1;grid-row:3}
+.sl{grid-template-columns:minmax(0,1fr) 110px 40px}
 .head .btn.new{display:none}
 nav.bot{display:flex;position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-top:1px solid var(--bd);padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));justify-content:space-around;align-items:center;z-index:20}
 nav.bot button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:600;color:var(--mut);padding:6px 5px}
@@ -138,6 +140,9 @@ nav.bot .plus{background:var(--tx);color:#fff;width:50px;height:50px;border-radi
     <label>Расходы</label>
     <div id="xs"></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"><button type="button" class="btn o s" data-act="ax" data-c="Зарядка">＋ Зарядка</button><button type="button" class="btn o s" data-act="ax" data-c="Парковка">＋ Парковка</button><button type="button" class="btn o s" data-act="ax" data-c="Мойка">＋ Мойка</button><button type="button" class="btn o s" data-act="ax" data-c="Прочее">＋ Другое</button></div>
+    <label>Доп. услуги (сумма плюсуется к зарплате)</label>
+    <div id="svs"></div>
+    <div style="margin-bottom:16px"><button type="button" class="btn o s" data-act="asv">＋ Доп. услуга</button></div>
     <div class="fld"><label for="fc">Комментарий</label><textarea id="fc" rows="2" placeholder="Задержки, происшествия, заметки"></textarea></div>
     <label>Предпросмотр</label><pre id="pv"></pre>
     <div class="acts"><button class="btn" data-act="sc">Сохранить и скопировать</button><button class="btn o" data-act="sv">Только сохранить</button></div>
@@ -205,7 +210,7 @@ function copy(t){function fb(){var a=document.createElement("textarea");a.value=
 function text(r){
   var l=["Отчёт за смену — "+fd(r.date)];
   if(D.name)l.push("Курьер: "+D.name);
-  l.push("Доставок: "+r.n);l.push(payLine(payOf(r)));
+  l.push("Доставок: "+r.n);l.push(payLine(payOf(r)));(r.sv||[]).forEach(function(e){if(e.a||e.n)l.push("Доп. услуга: "+(e.n||"без названия")+" — "+(e.a?money(e.a):"—"))});
   if(r.km)l.push("Пробег: "+r.km+" км");
   (r.exp||[]).forEach(function(e){if(e.a||e.n)l.push(e.c+": "+(e.a?money(e.a):"—")+(e.k||e.n?" ("+[e.k?e.k+" кВт·ч"+(e.p?" × "+e.p+" ₴":""):"",e.n].filter(Boolean).join(", ")+")":""))});
   if(cost(r))l.push("Итого расходов: "+money(cost(r)));
@@ -218,11 +223,12 @@ function payMap(list){var s=list.slice().sort(function(a,b){return a.date<b.date
   s.forEach(function(r){var c=B[B.length-1],l=c&&c[c.length-1];if(c&&c.length<mx&&(r.g==="p"||(r.g!=="s"&&dd(l.date,r.date)===1)))c.push(r);else B.push([r])});
   B.forEach(function(blk,bi){var l=blk[blk.length-1],nd=new Date(l.date+"T12:00:00");nd.setDate(nd.getDate()+1);var k=nd.getFullYear()+"-"+String(nd.getMonth()+1).padStart(2,"0")+"-"+String(nd.getDate()).padStart(2,"0");
     var tot=blk.reduce(function(x,r){return x+r.n},0),open=bi===B.length-1&&blk.length<mx&&dd(l.date,t)<=1&&D.sched[k]!=="o",days=open?mx:blk.length,cap=P.norm*days,ex=Math.max(0,tot-cap);
-    blk.forEach(function(r,j){var last=j===blk.length-1;m[r.id]={base:P.rate,extra:last?ex:0,bonus:last?ex*P.bonus:0,open:open,cap:cap,days:days}})});
+    blk.forEach(function(r,j){var last=j===blk.length-1;m[r.id]={svc:svc(r),base:P.rate,extra:last?ex:0,bonus:last?ex*P.bonus:0,open:open,cap:cap,days:days}})});
   return m}
 function payOf(r){var l=D.reports.filter(function(x){return x.id!==r.id}).concat([r]);return payMap(l)[r.id]}
-function payLine(p){var s="Зарплата за смену: "+money(p.base+p.bonus);if(p.bonus)s+=" (ставка "+money(p.base)+" + доплата "+money(p.bonus)+": "+p.extra+" дост. сверх "+p.cap+" за "+p.days+(p.days===1?" смену)":" смены)");return s}
-function payHtml(r){var p=payOf(r);return'<div style="font-size:24px;font-weight:800;letter-spacing:-.5px">'+money(p.base+p.bonus)+'</div><div style="font-size:13px;color:var(--mut);margin-top:4px">Ставка '+money(p.base)+(p.bonus?' + доплата '+money(p.bonus)+' ('+p.extra+' дост. сверх '+p.cap+' за '+p.days+(p.days===1?' смену':' смены')+')':'')+'</div>'+(p.open?'<div style="font-size:12px;color:var(--mut);margin-top:6px">Доплата предварительная: если завтра ещё смена, считается по сумме двух смен. Чтобы закрыть расчёт сейчас, отметь завтра выходным в графике или выбери «Отдельно».</div>':'')}
+function svc(r){return(r.sv||[]).reduce(function(s,e){return s+(+e.a||0)},0)}
+function payLine(p){var s="Зарплата за смену: "+money(p.base+p.bonus+p.svc),d=["ставка "+money(p.base)];if(p.bonus)d.push("доплата "+money(p.bonus)+": "+p.extra+" дост. сверх "+p.cap+" за "+p.days+(p.days===1?" смену":" смены"));if(p.svc)d.push("доп. услуги "+money(p.svc));return s+" ("+d.join(" + ")+")"}
+function payHtml(r){var p=payOf(r);return'<div style="font-size:24px;font-weight:800;letter-spacing:-.5px">'+money(p.base+p.bonus+p.svc)+'</div><div style="font-size:13px;color:var(--mut);margin-top:4px">Ставка '+money(p.base)+(p.bonus?' + доплата '+money(p.bonus)+' ('+p.extra+' дост. сверх '+p.cap+' за '+p.days+(p.days===1?' смену':' смены')+')':'')+(p.svc?' + доп. услуги '+money(p.svc):'')+'</div>'+(p.open?'<div style="font-size:12px;color:var(--mut);margin-top:6px">Доплата предварительная: если завтра ещё смена, считается по сумме двух смен. Чтобы закрыть расчёт сейчас, отметь завтра выходным в графике или выбери «Отдельно».</div>':'')}
 function lastPrice(){var s=D.reports.slice().sort(function(a,b){return a.date<b.date?1:-1});for(var i=0;i<s.length;i++){var x=s[i].exp||[];for(var j=x.length-1;j>=0;j--)if(x[j].c==="Зарядка"&&x[j].p)return x[j].p}return +D.tariff||17.5}
 var DL=null;
 try{if(window.claude&&claude.use)claude.use("downloads").then(function(x){DL=x;if(x)render()},function(){})}catch(e){}
@@ -238,14 +244,14 @@ function renderSch(){var y=+M.slice(0,4),mo=+M.slice(5)-1,last=new Date(y,mo+1,0
   $("cal").innerHTML=h;$("br").innerHTML=[["s","Смена"],["o","Выходной"],["x","Стереть"]].map(function(q){return'<button class="btn o'+(BR===q[0]?' on':'')+'" data-act="br" data-b="'+q[0]+'">'+q[1]+'</button>'}).join("");
   $("skp").innerHTML=[["Смен в графике",sh],["Выходных",of],["Отчётов сдано",inM(M).length],["Без отчёта",miss]].map(kpi).join("")}
 function renderExp(){var rs=inM(M),earn=0,ct=0,ot=0,cl=[],ol=[],el=[];
-  var PM=payMap(D.reports);rs.forEach(function(r){var p=PM[r.id]||{base:0,bonus:0},e=p.base+p.bonus;earn+=e;el.push('<div class="row"><div class="m"><b>'+fd(r.date)+'</b><small>'+r.n+' дост.'+(p.bonus?' · доплата +'+money(p.bonus):'')+'</small></div><span class="num">'+money(e)+'</span></div>');
+  var PM=payMap(D.reports);rs.forEach(function(r){var p=PM[r.id]||{base:0,bonus:0,svc:0},e=p.base+p.bonus+p.svc;earn+=e;el.push('<div class="row"><div class="m"><b>'+fd(r.date)+'</b><small>'+r.n+' дост.'+(p.bonus?' · доплата +'+money(p.bonus):'')+(p.svc?' · услуги +'+money(p.svc):'')+'</small></div><span class="num">'+money(e)+'</span></div>');
     (r.exp||[]).forEach(function(x){if(!x.a)return;var it={d:r.date,c:x.c,a:+x.a,n:x.n,k:x.k,p:x.p};if(x.c==="Зарядка"){ct+=it.a;cl.push(it)}else{ot+=it.a;ol.push(it)}})});
   $("ekp").innerHTML=[["Заработок",money(earn)],["Чистый заработок",money(earn-ot)],["Зарядка (платит начальник)",money(ct)],["Прочие расходы",money(ot)]].map(kpi).join("");
   function ls(a){return a.length?a.reverse().map(function(i){return'<div class="row"><div class="m"><b>'+fd(i.d)+'</b><small>'+esc(i.c)+(i.k?' · '+i.k+' кВт·ч'+(i.p?' × '+i.p+' ₴':''):'')+(i.n?' · '+esc(i.n):'')+'</small></div><span class="num">'+money(i.a)+'</span></div>'}).join(""):'<div class="empty">Записей нет</div>'}
   $("ern").innerHTML=el.length?el.reverse().join(""):'<div class="empty">Укажи заработок в отчёте за смену</div>';
   $("chg").innerHTML=ls(cl);$("oth").innerHTML=ls(ol)}
 function wrapT(x,t,mw){var out=[];String(t).replace(/\r/g,"").split("\n").forEach(function(p){if(!p.trim()){out.push("");return}var ln="";p.split(/ +/).forEach(function(w){var s=ln?ln+" "+w:w;if(x.measureText(s).width>mw&&ln){out.push(ln);ln=w}else ln=s});out.push(ln)});while(out.length&&!out[out.length-1])out.pop();return out}
-function png(r){var L=[["Дата",fd(r.date)]];if(D.name)L.push(["Курьер",D.name]);L.push(["Доставок",String(r.n)]);var pp=payOf(r);L.push(["Ставка за смену",money(pp.base)]);if(pp.bonus)L.push(["Доплата за "+pp.extra+" дост.","+"+money(pp.bonus)]);L.push(["Зарплата за смену",money(pp.base+pp.bonus)]);if(r.km)L.push(["Пробег",r.km+" км"]);
+function png(r){var L=[["Дата",fd(r.date)]];if(D.name)L.push(["Курьер",D.name]);L.push(["Доставок",String(r.n)]);var pp=payOf(r);L.push(["Ставка за смену",money(pp.base)]);if(pp.bonus)L.push(["Доплата за "+pp.extra+" дост.","+"+money(pp.bonus)]);(r.sv||[]).forEach(function(e){if(e.a||e.n)L.push([("Доп. "+(e.n||"услуга")).slice(0,34),"+"+money(e.a)])});L.push(["Зарплата за смену",money(pp.base+pp.bonus+pp.svc)]);if(r.km)L.push(["Пробег",r.km+" км"]);
   (r.exp||[]).forEach(function(e){if(e.a||e.n){var lb=e.c+(e.k?" · "+e.k+" кВт·ч"+(e.p?" × "+e.p:""):"")+(e.n?" · "+e.n:"");L.push([lb.length>32?lb.slice(0,31)+"…":lb,e.a?money(e.a):"—"])}});
   if(cost(r))L.push(["Итого расходов",money(cost(r))]);
   var W=900,P=56,LH=58,top=232,c=document.createElement("canvas"),x=c.getContext("2d");x.font="26px Arial,sans-serif";
@@ -272,7 +278,7 @@ function render(){
   var rs=inM(M),n=rs.reduce(function(s,r){return s+r.n},0),c=rs.reduce(function(s,r){return s+cost(r)},0),km=rs.reduce(function(s,r){return s+(+r.km||0)},0);
   var PM=payMap(D.reports);var has=D.reports.some(function(r){return r.date===today()});
   $("banner").innerHTML=has?"":'<div class="banner"><div><b>Смена сегодня не закрыта</b><span>Заполни отчёт, когда закончишь доставки</span></div><button class="btn" data-act="new">Заполнить отчёт</button></div>';
-  $("kpis").innerHTML=[["Доставки",n],["Смены",rs.length],["Заработок",money(rs.reduce(function(s,r){var p=PM[r.id];return s+(p?p.base+p.bonus:0)},0))],["Зарядка",money(rs.reduce(function(s,r){return s+chg(r)},0))]].map(function(k){return'<div class="card kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div></div>'}).join("");
+  $("kpis").innerHTML=[["Доставки",n],["Смены",rs.length],["Заработок",money(rs.reduce(function(s,r){var p=PM[r.id];return s+(p?p.base+p.bonus+p.svc:0)},0))],["Зарядка",money(rs.reduce(function(s,r){return s+chg(r)},0))]].map(function(k){return'<div class="card kpi"><div class="l">'+k[0]+'</div><div class="v">'+k[1]+'</div></div>'}).join("");
   var mx=Math.max(1,Math.max.apply(null,rs.map(function(r){return r.n}).concat([1])));
   $("chart").innerHTML=rs.length?rs.map(function(r){return'<div class="bar"><b>'+r.n+'</b><i style="height:'+Math.max(3,r.n/mx*100)+'px"></i>'+r.date.slice(8)+'</div>'}).join(""):'<div class="empty" style="width:100%">Нет данных за этот месяц</div>';
   var by={};rs.forEach(function(r){(r.exp||[]).forEach(function(e){if(e.a)by[e.c]=(by[e.c]||0)+(+e.a)})});
@@ -291,11 +297,14 @@ function xline(c,a,n,k,p){var d=document.createElement("div");d.className="xl"+(
   $("xs").appendChild(d);pv()}
 function collect(){
   var ex=[].slice.call(document.querySelectorAll("#xs .xl")).map(function(x){var i=x.querySelectorAll("input"),cc=x.querySelector("select").value,o={c:cc,a:+i[2].value||0,n:i[3].value.trim()};if(cc==="Зарядка"&&+i[0].value){o.k=+i[0].value;if(+i[1].value)o.p=+i[1].value}return o}).filter(function(e){return e.a||e.n});
-  return{id:editId||String(Date.now()),date:$("fd").value||today(),n:Math.max(0,Math.round(+$("fn").value||0)),km:+$("fk").value||0,g:$("fg").value,exp:ex,note:$("fc").value.trim()}}
+  return{id:editId||String(Date.now()),date:$("fd").value||today(),n:Math.max(0,Math.round(+$("fn").value||0)),km:+$("fk").value||0,g:$("fg").value,exp:ex,sv:svList(),note:$("fc").value.trim()}}
+function svList(){return[].slice.call(document.querySelectorAll("#svs .sl")).map(function(x){var i=x.querySelectorAll("input");return{n:i[0].value.trim(),a:+i[1].value||0}}).filter(function(e){return e.a||e.n})}
+function svline(n,a){var d=document.createElement("div");d.className="sl";d.innerHTML='<input placeholder="Что за услуга" value="'+esc(n||"")+'"><input type="number" inputmode="decimal" min="0" step="any" placeholder="Сумма, ₴" value="'+esc(a||"")+'"><button type="button" data-act="rs" aria-label="Убрать">×</button>';$("svs").appendChild(d);pv()}
 function pv(){var r=collect();$("pv").textContent=text(r);$("pay").innerHTML=payHtml(r)}
 function openForm(r){editId=r?r.id:null;$("ft").textContent=r?"Редактирование":"Новый отчёт";
   $("fd").value=r?r.date:today();$("fn").value=r?r.n:0;$("fk").value=r&&r.km?r.km:"";$("fg").value=r&&r.g||"";$("fc").value=r?r.note||"":"";
   $("xs").innerHTML="";(r?r.exp:[]).forEach(function(e){xline(e.c,e.a||"",e.n,e.k,e.p||(e.k&&e.a?Math.round(e.a/e.k*100)/100:""))});
+  $("svs").innerHTML="";(r&&r.sv||[]).forEach(function(e){svline(e.n,e.a)});
   if(!r)xline("Зарядка","","");
   go("form");pv()}
 function commit(andCopy){var r=collect();
@@ -313,7 +322,8 @@ document.addEventListener("click",function(e){
   else if(a==="dm"){$("fn").value=Math.max(0,(+$("fn").value||0)-1);pv()}
   else if(a==="dp"){$("fn").value=(+$("fn").value||0)+1;pv()}
   else if(a==="ax")xline(b.dataset.c,"","");
-  else if(a==="rx"){b.parentNode.remove();pv()}
+  else if(a==="rx"||a==="rs"){b.parentNode.remove();pv()}
+  else if(a==="asv")svline("","");
   else if(a==="sv")commit(false);
   else if(a==="sc")commit(true);
   else if(a==="cp"&&r)copy(text(r));
